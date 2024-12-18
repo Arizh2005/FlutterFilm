@@ -1,10 +1,11 @@
 class Film {
-  final int? id;
-  final String title;
-  final String description;
-  final String director;
-  final int releaseYear;
-  final String genre;
+  int? id;
+  String title;
+  String description;
+  String director;
+  int releaseYear;
+  String genre;
+  String poster;
 
   Film({
     this.id,
@@ -13,6 +14,7 @@ class Film {
     required this.director,
     required this.releaseYear,
     required this.genre,
+    required this.poster,
   });
 
   factory Film.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class Film {
       director: json['director'],
       releaseYear: json['release_year'],
       genre: json['genre'],
+      poster: json['poster'],
     );
   }
 
@@ -33,6 +36,7 @@ class Film {
       'director': director,
       'release_year': releaseYear,
       'genre': genre,
+      'poster': poster,
     };
   }
 }

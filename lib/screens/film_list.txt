@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+import '../services/film_service.dart';
+import '../models/film.dart';
+import '../screens/add_edit_film_screen.dart';
+
+class FilmListScreen extends StatefulWidget {
+  @override
+  _FilmListScreenState createState() => _FilmListScreenState();
+}
+
+class _FilmListScreenState extends State<FilmListScreen> {
+  final FilmService _filmService = FilmService();
+  late Future<List<Film>> _films;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFilms();
+  }
+
+  void _loadFilms() {
+    setState(() {
+      _films = _filmService.getFilms();
+    });
+  }
+
+  void _deleteFilm(int id) async {
+    await _filmService.deleteFilm(id);
+    _loadFilms();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Films')),
+      body: FutureBuilder<List<Film>>(
+        future: _films,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No films available.'));
+          } else {
+            final films = snapshot.data!;
+            return ListView.builder(
+              itemCount: films.length,
+              itemBuilder: (context, index) {
+                final film = films[index];
+                return ListTile(
+                  leading: Image.network(
+                    film.poster,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(Icons.image_not_supported, size: 50);
+                    },
+                  ),
+                  title: Text(film.title),
+                  subtitle: Text(film.director),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () => _deleteFilm(film.id ?? 0),
+                  ),
+                  onTap: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddEditFilmScreen(film: film),
+                      ),
+                    );
+                    if (result == true) _loadFilms();
+                  },
+                );
+              },
+            );
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddEditFilmScreen()),
+          );
+          if (result == true) _loadFilms();
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
