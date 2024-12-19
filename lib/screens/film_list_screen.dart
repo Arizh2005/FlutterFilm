@@ -123,7 +123,7 @@ class _FilmListScreenState extends State<FilmListScreen> {
           Container(
             margin: const EdgeInsets.only(right: 10),
             decoration: BoxDecoration(
-              color: Colors.orange[700],
+              color: Colors.blue[700],
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconButton(
@@ -167,7 +167,7 @@ class _FilmListScreenState extends State<FilmListScreen> {
                   return Center(
                     child: CircularProgressIndicator(
                       valueColor:
-                          AlwaysStoppedAnimation<Color>(Colors.orange[700]!),
+                          AlwaysStoppedAnimation<Color>(Colors.blue[700]!),
                     ),
                   );
                 } else if (snapshot.hasError) {

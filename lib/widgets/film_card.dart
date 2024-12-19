@@ -42,10 +42,10 @@ class FilmCard extends StatelessWidget {
                       height: double.infinity,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
-                          color: Colors.grey[200],
+                          color: Colors.blue[800],
                           child: const Center(
                             child: Icon(Icons.broken_image,
-                                size: 100, color: Colors.grey),
+                                size: 100, color: Colors.blue),
                           ),
                         );
                       },
